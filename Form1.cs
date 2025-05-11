@@ -1,4 +1,6 @@
-﻿namespace WinFormsApp2
+﻿using System.Net.Http.Json;
+
+namespace WinFormsApp2
 {
     public partial class Form1 : Form
     {
@@ -6,6 +8,8 @@
         private Dictionary<string, List<string>> conversationHistory = new Dictionary<string, List<string>>();
         private Dictionary<string, List<string>> conversationSenders = new Dictionary<string, List<string>>();
         private string selectedConversation = null;
+        private static readonly HttpClient httpClient = new HttpClient();
+        private const string apiKey = "AIzaSyA334LMpBm4-oxYwo__b-76U5NrZX5_Ahk"; // Replace this
 
         public Form1()
         {
@@ -19,19 +23,28 @@
             if (e.KeyCode == Keys.Enter && !e.Shift) // Check if Enter is pressed (without Shift for multi-line input)
             {
                 e.SuppressKeyPress = true; // Prevents the "ding" sound
-                btnSend.PerformClick(); // Trigger the send button click event
+                btnSend.PerformClick();
             }
         }
 
         private void InitializeConversationPanel()
         {
-            // Left panel for conversations
+            // Check if the panel already exists
+            Panel existingPanel = this.Controls.OfType<Panel>().FirstOrDefault(p => p.Dock == DockStyle.Left);
+
+            // If it exists, clear it out, otherwise create a new one
+            if (existingPanel != null)
+            {
+                existingPanel.Controls.Clear(); // Clears the previous content
+                existingPanel.Dispose(); // Optional: dispose the old panel if you want to free up resources
+            }
+
+            // Create a new panel for conversations
             Panel panelConversations = new Panel();
             panelConversations.Dock = DockStyle.Left;
             panelConversations.Width = 200;
-            panelConversations.BackColor = Color.FromArgb(60,60,60);
+            panelConversations.BackColor = Color.FromArgb(60, 60, 60);
 
-            // Adding the panel to the form
             this.Controls.Add(panelConversations);
 
             // Add a scrollable list of conversation titles
@@ -60,6 +73,7 @@
 
             conversationList.Controls.Add(btnNewConversation);
         }
+
 
         private void CreateNewConversation(FlowLayoutPanel conversationList)
         {
@@ -189,6 +203,36 @@
             }
         }
 
+        public void ClearAllConversations()
+        {
+            conversations.Clear();
+            conversationHistory.Clear();
+            conversationSenders.Clear();
+            selectedConversation = null;
+
+            // Remove all controls from the left panel
+            foreach (Control control in this.Controls)
+            {
+                if (control is Panel panel && panel.Dock == DockStyle.Left)
+                {
+                    foreach (Control inner in panel.Controls)
+                    {
+                        if (inner is FlowLayoutPanel flow)
+                        {
+                            flow.Controls.Clear();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Clear chat messages and reset
+            panelChat.Controls.Clear();
+
+            InitializeConversationPanel();
+            Form1_Load(null, EventArgs.Empty);
+        }
+
         private void StoreMessage(string conversationName, string sender, string message)
         {
             if (!conversationHistory.ContainsKey(conversationName))
@@ -253,6 +297,15 @@
             panelChat.ScrollControlIntoView(centerContainer);
         }
 
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            var settingsForm = new SettingsForm();
+            settingsForm.Owner = this;
+            settingsForm.ShowDialog();
+        }
+
+
+
         private async void btnSend_Click(object sender, EventArgs e)
         {
             string userInput = txtInput.Text.Trim();
@@ -284,8 +337,37 @@
 
         private async Task<string> GetAIResponseAsync(string userInput)
         {
-            await Task.Delay(1000);
-            return "Here's a fake answer to: \n" + userInput;
+            try
+            {
+                var requestBody = new
+                {
+                    contents = new[]
+                    {
+                new
+                {
+                    role = "user",
+                    parts = new[] { new { text = userInput } }
+                }
+            }
+                };
+
+                var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Post,
+                    RequestUri = new Uri($"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={apiKey}"),
+                    Content = JsonContent.Create(requestBody)
+                };
+
+                var response = await httpClient.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+                var responseJson = await response.Content.ReadFromJsonAsync<GeminiResponse>();
+                return responseJson?.candidates?[0]?.content?.parts?[0]?.text ?? "No response from Gemini.";
+            }
+            catch (Exception ex)
+            {
+                return $"Error: {ex.Message}";
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -315,5 +397,26 @@
                 }
             }
         }
+
+        public class GeminiResponse
+        {
+            public Candidate[] candidates { get; set; }
+        }
+
+        public class Candidate
+        {
+            public Content content { get; set; }
+        }
+
+        public class Content
+        {
+            public Part[] parts { get; set; }
+        }
+
+        public class Part
+        {
+            public string text { get; set; }
+        }
+
     }
 }

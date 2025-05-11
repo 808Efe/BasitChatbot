@@ -14,3 +14,6 @@ C:\Users\efed8\source\repos\WinFormsApp2\WinFormsApp2\obj\Debug\net8.0-windows\r
 C:\Users\efed8\source\repos\WinFormsApp2\WinFormsApp2\obj\Debug\net8.0-windows\WinFormsApp2.pdb
 C:\Users\efed8\source\repos\WinFormsApp2\WinFormsApp2\obj\Debug\net8.0-windows\WinFormsApp2.genruntimeconfig.cache
 C:\Users\efed8\source\repos\WinFormsApp2\WinFormsApp2\obj\Debug\net8.0-windows\ref\WinFormsApp2.dll
+C:\Users\efed8\source\repos\WinFormsApp2\WinFormsApp2\obj\Debug\net8.0-windows\WinFormsApp2.LoginForm.resources
+C:\Users\efed8\source\repos\WinFormsApp2\WinFormsApp2\obj\Debug\net8.0-windows\WinFormsApp2.sourcelink.json
+C:\Users\efed8\source\repos\WinFormsApp2\WinFormsApp2\obj\Debug\net8.0-windows\WinFormsApp2.SettingsForm.resources

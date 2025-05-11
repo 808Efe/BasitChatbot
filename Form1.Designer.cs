@@ -31,6 +31,7 @@
             txtInput = new TextBox();
             btnSend = new Button();
             panel1 = new Panel();
+            btnSettings = new Button();
             panelChat = new FlowLayoutPanel();
             panelConversations = new Panel();
             panel1.SuspendLayout();
@@ -42,7 +43,7 @@
             txtInput.BackColor = Color.FromArgb(60, 60, 60);
             txtInput.BorderStyle = BorderStyle.None;
             txtInput.ForeColor = Color.White;
-            txtInput.Location = new Point(227, 30);
+            txtInput.Location = new Point(175, 30);
             txtInput.Multiline = true;
             txtInput.Name = "txtInput";
             txtInput.Size = new Size(301, 48);
@@ -54,7 +55,7 @@
             btnSend.Cursor = Cursors.Hand;
             btnSend.FlatStyle = FlatStyle.Flat;
             btnSend.ForeColor = Color.White;
-            btnSend.Location = new Point(548, 48);
+            btnSend.Location = new Point(494, 39);
             btnSend.Name = "btnSend";
             btnSend.Size = new Size(49, 30);
             btnSend.TabIndex = 2;
@@ -65,12 +66,23 @@
             // panel1
             // 
             panel1.Controls.Add(txtInput);
+            panel1.Controls.Add(btnSettings);
             panel1.Controls.Add(btnSend);
             panel1.Dock = DockStyle.Bottom;
             panel1.Location = new Point(0, 397);
             panel1.Name = "panel1";
             panel1.Size = new Size(800, 113);
             panel1.TabIndex = 3;
+            // 
+            // btnSettings
+            // 
+            btnSettings.Location = new Point(94, 55);
+            btnSettings.Name = "btnSettings";
+            btnSettings.Size = new Size(75, 23);
+            btnSettings.TabIndex = 1;
+            btnSettings.Text = "Settings";
+            btnSettings.UseVisualStyleBackColor = true;
+            btnSettings.Click += btnSettings_Click;
             // 
             // panelChat
             // 
@@ -116,5 +128,6 @@
         private Panel panel1;
         private FlowLayoutPanel panelChat;
         private Panel panelConversations;
+        private Button btnSettings;
     }
 }
