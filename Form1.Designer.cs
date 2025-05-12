@@ -97,9 +97,10 @@
             // 
             // panelConversations
             // 
+            panelConversations.Dock = DockStyle.Fill;
             panelConversations.Location = new Point(3, 3);
             panelConversations.Name = "panelConversations";
-            panelConversations.Size = new Size(153, 504);
+            panelConversations.Size = new Size(153, 0);
             panelConversations.TabIndex = 0;
             // 
             // Form1

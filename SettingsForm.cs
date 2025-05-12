@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static WinFormsApp2.UIHelper;
 
 namespace WinFormsApp2
 {
@@ -16,6 +17,7 @@ public partial class SettingsForm : Form
         {
             InitializeComponent();
             InitializeSettingsUI();
+            UIHelper.RoundAllControls(this);
         }
 
         private void InitializeSettingsUI()
