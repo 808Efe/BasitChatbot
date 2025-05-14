@@ -42,7 +42,7 @@
                 AutoSize = true,
                 Location = new Point((this.ClientSize.Width - 120) / 2, 30),
             };
-            lblTitle.Left = ((this.ClientSize.Width - lblTitle.Width) / 2) - 60;
+            lblTitle.Left = ((this.ClientSize.Width - lblTitle.Width) / 2) - 80;
 
             txtUsername = new TextBox()
             {
@@ -93,8 +93,27 @@
 
             if (username == "admin" && password == "admin")
             {
+                Form1.LoggedUser = "admin";
                 this.DialogResult = DialogResult.OK;  // Triggers return to Program.cs
                 this.Close(); // Closes the login form
+            }
+            else if (username == "efe" && password == "efe123")
+            {
+                Form1.LoggedUser = "efe";
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else if (username == "ruken" && password == "ruken123")
+            {
+                Form1.LoggedUser = "ruken";
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
+            else if (username == "baran" && password == "baran123")
+            {
+                Form1.LoggedUser = "baran";
+                this.DialogResult = DialogResult.OK;
+                this.Close();
             }
             else
             {

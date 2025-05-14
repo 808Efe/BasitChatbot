@@ -14,6 +14,9 @@ namespace WinFormsApp2
         private static readonly HttpClient httpClient = new HttpClient();
         private const string apiKey = "AIzaSyA334LMpBm4-oxYwo__b-76U5NrZX5_Ahk"; // Replace this
         private Panel topPanel;
+        public static string LoggedUser { get; set; }
+
+
         public Form1()
         {
             InitializeComponent();
@@ -66,16 +69,28 @@ namespace WinFormsApp2
             if (existingPanel != null)
             {
                 existingPanel.Controls.Clear(); // Clears the previous content
-                existingPanel.Dispose(); // Optional: dispose the old panel if you want to free up resources
+                existingPanel.Dispose(); // Dispose the old panel to free up resources
             }
 
-            // Create a new panel for conversations
             Panel panelConversations = new Panel();
             panelConversations.Dock = DockStyle.Left;
             panelConversations.Width = 200;
             panelConversations.BackColor = Color.FromArgb(60, 60, 60);
 
             this.Controls.Add(panelConversations);
+
+            Button btnNewConversation2 = new Button();
+            btnNewConversation2.Text = LoggedUser;
+            btnNewConversation2.ForeColor = Color.White;
+            btnNewConversation2.Size = new Size(90, 50);
+            btnNewConversation2.Dock = DockStyle.Bottom;
+            btnNewConversation2.FlatStyle = FlatStyle.Flat;
+            btnNewConversation2.FlatAppearance.BorderSize = 0;
+            btnNewConversation2.BackColor = Color.FromArgb(40, 40, 40);
+            btnNewConversation2.Margin = new Padding(10, 10, 10, 100); // left, top, right, bottom
+
+            panelConversations.Controls.Add(btnNewConversation2);
+
 
             // Add a scrollable list of conversation titles
             FlowLayoutPanel conversationList = new FlowLayoutPanel();
@@ -88,7 +103,7 @@ namespace WinFormsApp2
             Button btnNewConversation = new Button();
             btnNewConversation.Text = "New Conversation";
             btnNewConversation.Size = new Size(180, 50);
-            btnNewConversation.Margin = new Padding(10, 10, 10, 25); // left, top, right, bottom
+            btnNewConversation.Margin = new Padding(10, 10, 10, 0); // left, top, right, bottom
             btnNewConversation.BackColor = Color.FromArgb(0, 122, 204);
             btnNewConversation.ForeColor = Color.White;
             btnNewConversation.FlatStyle = FlatStyle.Flat;
@@ -102,6 +117,15 @@ namespace WinFormsApp2
             btnNewConversation.Click += (sender, e) => CreateNewConversation(conversationList);
 
             conversationList.Controls.Add(btnNewConversation);
+
+            // Separator
+            conversationList.Controls.Add(new Label
+            {
+                Text = "───────────────────────────",
+                AutoSize = true,
+                ForeColor = Color.Gray,
+                Margin = new Padding(0, 10, 0, 10)
+            });
         }
 
 
@@ -177,20 +201,12 @@ namespace WinFormsApp2
             {
                 txtInput.Clear();
                 selectedConversation = conversationName;
-                LoadConversation(conversationName);
                 UpdateConversationHighlight(conversationList);
-
-                foreach (Control control in conversationList.Controls)
-                {
-                    Button btn = control as Button;
-                    if (btn != null)
-                    {
-                        btn.BackColor = btn == btnConversation ? Color.FromArgb(50, 122, 204) : Color.LightGray;
-                        btn.ForeColor = btn == btnConversation ? Color.White : Color.Black;
-                        btn.Font = btn == btnConversation ? new Font("Segoe UI", 10, FontStyle.Bold) : new Font("Segoe UI", 10);
-                    }
-                }
+                LoadConversation(conversationName);
             };
+
+            btnConversation.FlatAppearance.BorderSize = 0;
+            btnConversation.Cursor = Cursors.Hand;
 
             conversationList.Controls.Add(btnConversation);
             UIHelper.RoundAllControls(this);
@@ -257,11 +273,10 @@ namespace WinFormsApp2
                 }
             }
 
-            // Clear chat messages and reset
             panelChat.Controls.Clear();
 
-            InitializeConversationPanel();
-            Form1_Load(null, EventArgs.Empty);
+            InitializeConversationPanel(); // To reinitialize the conversation panel
+            Form1_Load(null, EventArgs.Empty); // To make sure it reinitializes with an open conversation, preventing misbehavings
         }
 
         private void StoreMessage(string conversationName, string sender, string message)
@@ -290,8 +305,7 @@ namespace WinFormsApp2
                 BackColor = Color.Transparent
             };
 
-            // Message label
-            Label lbl = new Label
+            Label lblMessageText = new Label
             {
                 Text = message,
                 AutoSize = true,
@@ -301,8 +315,7 @@ namespace WinFormsApp2
                 BackColor = Color.Transparent
             };
 
-            // Chat bubble
-            Panel bubble = new Panel
+            Panel bubbleMessage = new Panel
             {
                 AutoSize = true,
                 Padding = new Padding(10),
@@ -311,19 +324,19 @@ namespace WinFormsApp2
                 MaximumSize = new Size(maxBubbleWidth + 20, 0)
             };
 
-            bubble.Controls.Add(lbl);
-            container.Controls.Add(bubble);
+            bubbleMessage.Controls.Add(lblMessageText);
+            container.Controls.Add(bubbleMessage);
 
-            // Alignment based on sender: right for "You", left for others
+            // Alignment based on sender: right for "You", left for "AI"
             this.BeginInvoke((MethodInvoker)delegate
             {
                 if (sender == "You")
                 {
-                    bubble.Left = container.Width - bubble.Width - 10; // Align to right
+                    bubbleMessage.Left = container.Width - bubbleMessage.Width + 10; // Align to right
                 }
                 else
                 {
-                    bubble.Left = 10; // Align to left
+                    bubbleMessage.Left = 10; // Align to left
                 }
 
                 panelChat.Controls.Add(container);
@@ -399,7 +412,7 @@ namespace WinFormsApp2
                 var response = await httpClient.SendAsync(request);
                 response.EnsureSuccessStatusCode();
 
-                var responseJson = await response.Content.ReadFromJsonAsync<GeminiResponse>();
+                var responseJson = await response.Content.ReadFromJsonAsync<AIResponse>();
                 return responseJson?.candidates?[0]?.content?.parts?[0]?.text ?? "No response from AI.";
             }
             catch (Exception ex)
@@ -442,7 +455,9 @@ namespace WinFormsApp2
             UIHelper.RoundAllControls(this);
         }
 
-        public class GeminiResponse
+
+        // Classes for JSON deserialization
+        public class AIResponse
         {
             public Candidate[] candidates { get; set; }
         }

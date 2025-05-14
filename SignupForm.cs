@@ -33,7 +33,7 @@
             this.Text = "Sign Up";
             this.FormBorderStyle = FormBorderStyle.FixedDialog;
             this.StartPosition = FormStartPosition.CenterScreen;
-            this.Size = new Size(420, 400); // Slightly increase the size to prevent tightness
+            this.Size = new Size(420, 400);
             this.BackColor = Color.FromArgb(60, 60, 60);
             this.MaximizeBox = false;
 
@@ -68,7 +68,6 @@
                 UseSystemPasswordChar = true
             };
 
-            // Male RadioButton
             rbMale = new RadioButton()
             {
                 Text = "Male",
@@ -78,7 +77,6 @@
                 Checked = true // Set Male as default
             };
 
-            // Female RadioButton
             rbFemale = new RadioButton()
             {
                 Text = "Female",
@@ -87,7 +85,6 @@
                 Location = new Point((this.ClientSize.Width - 250) / 2 + +120, 190),
             };
 
-            // Country ComboBox
             cbCountry = new ComboBox()
             {
                 Font = new Font("Segoe UI", 12),
@@ -105,7 +102,7 @@
                 Text = "Sign Up",
                 Font = new Font("Segoe UI", 12, FontStyle.Bold),
                 Size = new Size(250, 40),
-                Location = new Point((this.ClientSize.Width - 250) / 2, 310), // Adjust button position
+                Location = new Point((this.ClientSize.Width - 250) / 2, 310),
                 BackColor = Color.FromArgb(0, 122, 204),
                 ForeColor = Color.White,
                 FlatStyle = FlatStyle.Flat
@@ -127,13 +124,14 @@
         private void btnSignUp_Click(object sender, EventArgs e)
         {
             string username = txtUsername.Text.Trim();
-            string password = txtPassword.Text;
+            string password = txtPassword.Text.Trim();
 
-            MessageBox.Show("You can now login!", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            this.DialogResult = DialogResult.OK;  // Triggers return to Program.cs
-            this.Close();
-
+            if (username != "" && password != "" | username != " " && password != " " | username != "" && password != " " | username != " " && password != "")
+            {
+                MessageBox.Show("You can now login!", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                this.DialogResult = DialogResult.OK;
+                this.Close();
+            }
         }
 
         private void SignupForm_Load(object sender, EventArgs e)

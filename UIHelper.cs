@@ -11,7 +11,7 @@ namespace WinFormsApp2
         private static extern IntPtr CreateRoundRectRgn(int nLeftRect, int nTopRect, int nRightRect,
                                                         int nBottomRect, int nWidthEllipse, int nHeightEllipse);
 
-        public static void MakeRounded(Control ctrl, int radius = 22)
+        public static void MakeRounded(Control ctrl, int radius = 15)
         {
             ctrl.Region = Region.FromHrgn(CreateRoundRectRgn(0, 0, ctrl.Width, ctrl.Height, radius, radius));
             ctrl.Resize += (s, e) =>
@@ -20,7 +20,7 @@ namespace WinFormsApp2
             };
         }
 
-        public static void RoundAllControls(Control parent, int radius = 22)
+        public static void RoundAllControls(Control parent, int radius = 15)
         {
             foreach (Control c in parent.Controls)
             {

@@ -33,7 +33,6 @@ namespace WinFormsApp2
                 Location = new Point((this.ClientSize.Width - 250) / 2, 30),
             };
 
-            // Login Button
             btnLogin = new Button()
             {
                 Text = "Login",
@@ -46,7 +45,9 @@ namespace WinFormsApp2
             };
             btnLogin.Click += BtnLogin_Click;
 
-            // Signup Button
+            btnLogin.FlatAppearance.BorderSize = 0;
+            btnLogin.Cursor = Cursors.Hand;
+
             btnSignup = new Button()
             {
                 Text = "Sign Up",
@@ -58,6 +59,9 @@ namespace WinFormsApp2
                 FlatStyle = FlatStyle.Flat
             };
             btnSignup.Click += BtnSignup_Click;
+
+            btnSignup.FlatAppearance.BorderSize = 0;
+            btnSignup.Cursor = Cursors.Hand;
 
             this.Controls.Add(lblAppName);
             this.Controls.Add(btnLogin);

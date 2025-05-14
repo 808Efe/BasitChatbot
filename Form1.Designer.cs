@@ -53,6 +53,7 @@
             // 
             btnSend.BackColor = Color.FromArgb(0, 122, 204);
             btnSend.Cursor = Cursors.Hand;
+            btnSend.FlatAppearance.BorderSize = 0;
             btnSend.FlatStyle = FlatStyle.Flat;
             btnSend.ForeColor = Color.White;
             btnSend.Location = new Point(494, 39);
@@ -76,7 +77,9 @@
             // 
             // btnSettings
             // 
-            btnSettings.Location = new Point(94, 55);
+            btnSettings.Location = new Point(71, 55);
+            btnSettings.Cursor = Cursors.Hand;
+            btnSettings.FlatAppearance.BorderSize = 0;
             btnSettings.Name = "btnSettings";
             btnSettings.Size = new Size(75, 23);
             btnSettings.TabIndex = 1;
