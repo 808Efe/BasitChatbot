@@ -12,7 +12,7 @@ namespace WinFormsApp2
         private Dictionary<string, List<string>> conversationSenders = new Dictionary<string, List<string>>();
         private string selectedConversation = null;
         private static readonly HttpClient httpClient = new HttpClient();
-        private const string apiKey = "AIzaSyA334LMpBm4-oxYwo__b-76U5NrZX5_Ahk"; // Replace this
+        private const string apiKey = "YOUR API KEY HERE"; // Replace this
         private Panel topPanel;
         public static string LoggedUser { get; set; }
 
