@@ -126,11 +126,15 @@
             string username = txtUsername.Text.Trim();
             string password = txtPassword.Text.Trim();
 
-            if (username != "" && password != "" | username != " " && password != " " | username != "" && password != " " | username != " " && password != "")
+            if (!string.IsNullOrWhiteSpace(username) && !string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("You can now login!", "Successful", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.DialogResult = DialogResult.OK;
                 this.Close();
+            }
+            else
+            {
+                MessageBox.Show("Username and password cannot be empty.", "Sign Up Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 
