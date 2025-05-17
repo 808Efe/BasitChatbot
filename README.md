@@ -18,7 +18,11 @@ A simple ChatGPT-like chatbot UI built using C# and Windows Forms. Built as a ba
 3. Build and run the project.
 
 ## Screenshots
+![Sign Up Page](loginscreen.png)
 
+![Main Page](image.png)
+
+![Settings Page](image.png)
 
 ## License
 
